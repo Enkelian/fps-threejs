@@ -222,7 +222,7 @@ const MainScene = () => {
     function addZombie(position, zombieNo) {
         const zombieLoader = new THREE.FBXLoader();
 
-        zombies.push({ object: null, mixer: null, zombieCollided: null});
+        const zombie = { object: null, mixer: null, zombieCollided: null, recentlyCollided: false};
 
         zombieLoader.load( './enemies/FBX/Zombie_Female.fbx', object => {
 
@@ -253,17 +253,17 @@ const MainScene = () => {
                     console.log('zombie hit!')
                 }
                 else if (otherObject.name !== 'ground') {
-                    if(zombies[zombieNo].zombieCollided !== otherObject) {
+                    if(zombie.zombieCollided !== otherObject && !zombie.recentlyCollided) {
                         let randomRotation = Math.random() * Math.PI + Math.PI/2;
                         object.rotation.y += randomRotation;
-                        zombies[zombieNo].zombieCollided = otherObject;
+                        zombie.zombieCollided = otherObject;
+                        zombie.recentlyCollided = true;
                     }
                 }
             });
-            zombies[zombieNo].object = object;
-            console.log(zombies[zombieNo].object)
-            zombies[zombieNo].mixer = mixer;
-
+            zombie.object = object;
+            zombie.mixer = mixer;
+            zombies.push(zombie);
             scene.add( object );
 
         } );
@@ -278,6 +278,17 @@ const MainScene = () => {
         vector.applyQuaternion( zombieObj.quaternion );
         vector.divideScalar(50);
         zombieObj.position.add(vector);
+    }
+
+    function getPlayerPosition(){
+        let vector = camera.position.clone();
+        vector.applyMatrix4(camera.matrixWorld);
+        return vector;
+    }
+
+    function changeDirectionToPlayer(zombieObj){
+        // let playerPosition = getPlayerPosition();
+        // zombieObj.rotation.y = Math.atan2(playerPosition.z, playerPosition.x);
     }
 
 
@@ -311,7 +322,6 @@ const MainScene = () => {
 
         bullet.position.copy(emitter.getWorldPosition());
         bullet.quaternion.copy(camera.quaternion);
-        bullets.push(bullet);
 
         scene.add(bullet);
         physics.add.existing(bullet, {mass: 0.00001, collisionFlags: 0});
@@ -324,6 +334,8 @@ const MainScene = () => {
 
 // Set the radius of the embedded sphere such that it is smaller than the object
         bullet.body.setCcdSweptSphereRadius(0.1);
+        bullets.push({object: bullet, age: Date.now()});
+
     }
 
 
@@ -349,50 +361,64 @@ const MainScene = () => {
         }
     }
 
-    const limit = 1;
+    const ageLimit = 500;
     const animate = () => {
 
         let delta = clock.getDelta();
-        if(zombies) {
-            zombies.forEach((zombie) => {if(zombie.mixer) zombie.mixer.update(delta)});
+
+        let currentTime = Date.now();
+
+        for (let i = bullets.length - 1; i >= 0; i--) {
+            let bullet = bullets[i].object;
+            let bulletAge = bullets[i].age;
+            if(bullet && bullet.geometry && bullet.material) {
+                if (currentTime - bulletAge > ageLimit) {
+                    bullet.geometry.dispose();
+                    bullet.material.dispose();
+                    scene.remove(bullet);
+                    physics.destroy(bullet.body);
+                    bullets.splice(i, 1);
+                }
+            }
+            else bullets[i].age = currentTime;
         }
+
+        zombies.forEach((zombie) => {
+            if(zombie.mixer) zombie.mixer.update(delta)
+
+            if(zombie.object) {
+
+                moveForward(zombie.object);
+
+                if(!zombie.recentlyCollided){
+                    changeDirectionToPlayer(zombie.object);
+                }
+                zombie.recentlyCollided = false;
+                zombie.object.body.needUpdate = true;
+            }
+
+        });
+
 
         physics.updateDebugger();
 
 
         camera.updateMatrixWorld();
-        let vector = camera.position.clone();
 
-        vector.applyMatrix4(camera.matrixWorld);
-        player.position.x = vector.x;
-        player.position.y = vector.y + 3;
-        player.position.z = vector.z;
+        let cameraPosition = getPlayerPosition();
+
+        player.position.x = cameraPosition.x;
+        player.position.y = cameraPosition.y + 3;
+        player.position.z = cameraPosition.z;
         player.body.needUpdate = true;
 
-        renderer.render(scene, camera)
-        for (let i = bullets.length - 1; i >= 0; i--) {
 
+        renderer.render(scene, camera);
 
-            if (bullets[i].position.x - camera.position.x > limit) {
-                //TODO: somehow remove the bullets here
-                // bullets[i].geometry.dispose();
-                // bullets[i].mesh.dispose();
-                // physics.rem(bullets[i]);
-                // scene.remove(bullets[i]);
-            }
-        }
-        // bullets.splice(i, 1);
         physics.update(clock.getDelta() * 1000000000)
 
-        requestAnimationFrame(animate)
 
-
-        zombies.forEach(zombie => {
-            if(zombie && zombie.object) {
-                moveForward(zombie.object);
-                zombie.object.body.needUpdate = true;
-            }
-        })
+        requestAnimationFrame(animate);
 
         controls.update( Date.now() - time );
 
@@ -400,8 +426,8 @@ const MainScene = () => {
 
         time = Date.now();
 
+
         //  TODO: health bar
-        //  TODO: detect collision with player
         //  TODO: work on bullet collision
         // TODO: zombie movement: a random number of zombies will change their direction to player's position
 

@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc02b61f-cd3d-45e9-9d95-554c10977cb1" name="Default Changelist" comment="pointer lock">
-      <change afterPath="$PROJECT_DIR$/main.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/zombie.js" afterDir="false" />
+    <list default="true" id="fc02b61f-cd3d-45e9-9d95-554c10977cb1" name="Default Changelist" comment="collisions, minor refactoring">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/main.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,7 +79,7 @@
       <workItem from="1609100032436" duration="14859000" />
       <workItem from="1609157761125" duration="22695000" />
       <workItem from="1609251750805" duration="4339000" />
-      <workItem from="1609271057503" duration="1969000" />
+      <workItem from="1609271057503" duration="6852000" />
     </task>
     <task id="LOCAL-00001" summary="pointer lock">
       <created>1609109076281</created>
@@ -90,7 +88,14 @@
       <option name="project" value="LOCAL" />
       <updated>1609109076281</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="collisions, minor refactoring">
+      <created>1609276743616</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1609276743616</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -110,6 +115,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="pointer lock" />
-    <option name="LAST_COMMIT_MESSAGE" value="pointer lock" />
+    <MESSAGE value="collisions, minor refactoring" />
+    <option name="LAST_COMMIT_MESSAGE" value="collisions, minor refactoring" />
   </component>
 </project>
