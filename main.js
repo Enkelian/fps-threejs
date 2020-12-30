@@ -120,64 +120,65 @@ const MainScene = () => {
 
     const { factory } = physics
 
-    const pistol = new THREE.FBXLoader();
-    pistol.load( './guns/FBX/Pistol.fbx', object => {
-        object.name = 'gun';
-        object.scale.setScalar(0.001);
-        object.position.x += 1;
-        object.position.y -= 0.5;
-        object.position.z -= 2;
-        object.rotation.y += 1.5;
-        // object.rotation.x -= 0.1;
-        object.traverse( function ( child ) {
-            // if ( child.isMesh ) {
-            //   child.material.wireframe bullet= true;
-            // }
 
-            if( child.material ) {
-                child.material = new THREE.MeshPhongMaterial({
-                    color: 0x2E282A,
-                    emissive: true,
-                    emissiveIntensity: 0.5
-                });
-            }
+    function createGun(){
+        const pistol = new THREE.FBXLoader();
+        pistol.load( './guns/FBX/Pistol.fbx', object => {
+
+            object.name = 'gun';
+            object.scale.setScalar(0.001);
+
+            object.position.x += 1;
+            object.position.y -= 0.5;
+            object.position.z -= 2;
+
+            object.rotation.y += 1.5;
+
+            object.traverse( function ( child ) {
+
+                if( child.material ) {
+                    child.material = new THREE.MeshPhongMaterial({
+                        color: 0x2E282A,
+                        emissive: true,
+                        emissiveIntensity: 0.5
+                    });
+                }
+
+            } );
+
+
+            camera.add( object );
 
         } );
+    }
 
+    createGun();
 
-        camera.add( object );
-        // physics.add.existing(object);
-
-    } );
-    let playerHealth = 100;
+    const player = { box: null, health: 100}
 
     function setCharacterBox(){
         let boxGeometry = new THREE.BoxGeometry(3, 3, 3);
         let boxMaterial = new THREE.MeshPhongMaterial({transparent: true, opacity: 0.1, color: 0x000000});
         let box = new THREE.Mesh(boxGeometry, boxMaterial);
         box.name = 'player';
-        // box.position.z -= 3;
-        // box.position.y ;
+        box.position.y += 1.5;
         scene.add(box);
         physics.add.existing(box);
 
-        // camera.add(box.body)
         box.body.setCollisionFlags(2);
 
         box.body.on.collision((otherObject, event) => {
             if (otherObject.name.startsWith('zombie')) {
-                playerHealth--;
-                console.log('Player collided with zombie. Remaining health: ' + playerHealth)
-
+                player.health--;
+                console.log('Player collided with zombie. Remaining health: ' + player.health)
             }
-        });          // let box = factory.add.box({x:0, y:0, z:0, width: 0.5, height: 2, depth: 0.5});
-        // physics.add(box);
-        // camera.add(box);
-        // box.add(camera);
-        return box;
+        });
+
+        player.box = box;
+
     }
 
-    const player = setCharacterBox();
+    setCharacterBox();
 
     let buildingNo = 0;
     const buildings = [];
@@ -213,8 +214,9 @@ const MainScene = () => {
     addBuilding({x: 40, y: 0, z: 40}, '2Story_Sign_Mat', Math.PI);
     addBuilding({x: 20, y: 0, z: 40}, '1Story_Sign_Mat', Math.PI);
     addBuilding({x: 0, y: 0, z: 40}, '1Story_Sign_Mat', Math.PI);
-
-
+    addBuilding({x: 0, y: 0, z: 80}, '1Story_Sign_Mat', Math.PI);
+    addBuilding({x: 20, y: 0, z: 80}, '3Story_Small_Mat', Math.PI);
+    addBuilding({x: 40, y: 0, z: 80}, '4Story_Mat', Math.PI);
 
     let zombieNo = 0;
     let zombies = [];
@@ -286,9 +288,19 @@ const MainScene = () => {
         } );
     }
 
+
     addZombie({x: 0, y: 0.5, z: 10}, zombieNo++);
     addZombie({x: 0, y: 0.5, z: 15}, zombieNo++);
     addZombie({x: 10, y: 0.5, z: 10}, zombieNo++);
+
+    function deleteZombie(zombieObj){
+        let zombieMesh = zombieObj.children[0];
+        zombieMesh.geometry.dispose();
+        zombieMesh.material.forEach(material => material.dispose());
+        zombieMesh.skeleton.dispose();
+        scene.remove(zombieObj);
+        physics.destroy(zombieObj.body);
+    }
 
     function moveForward(zombieObj){
         let vector = new THREE.Vector3( 0, 0, 1 );
@@ -301,11 +313,6 @@ const MainScene = () => {
         let vector = camera.position.clone();
         vector.applyMatrix4(camera.matrixWorld);
         return vector;
-    }
-
-    function changeDirectionToPlayer(zombieObj){
-        // let playerPosition = getPlayerPosition();
-        // zombieObj.rotation.y = Math.atan2(playerPosition.z, playerPosition.x);
     }
 
 
@@ -331,7 +338,7 @@ const MainScene = () => {
     let gunFocused = -1;
 
     function fireBullet(){
-        let geometry = new THREE.SphereGeometry(0.1, 16, 16);
+        let geometry = new THREE.SphereGeometry(0.01, 16, 16);
         let material = new THREE.MeshLambertMaterial({ color: 0x00ff00 });
         let bullet = new THREE.Mesh(geometry, material);
 
@@ -349,19 +356,21 @@ const MainScene = () => {
 
         bullet.body.setCcdMotionThreshold(1);
 
-// Set the radius of the embedded sphere such that it is smaller than the object
-        bullet.body.setCcdSweptSphereRadius(0.1);
+        bullet.body.setCcdSweptSphereRadius(0.01);
         bullets.push({object: bullet, age: Date.now()});
 
     }
 
 
     function gunFocus(){
+
         let gun = camera.getObjectByName('gun');
         if(!gun) return;
+
         gun.position.x += gunFocused * gunTranslation.x;
         gun.position.y += gunFocused * gunTranslation.y;
         gun.position.z += gunFocused * gunTranslation.z;
+
         emitter.position.x += gunFocused * 2 * gunTranslation.x;
         emitter.position.y += gunFocused * gunTranslation.y;
         emitter.position.z += gunFocused * gunTranslation.z;
@@ -401,34 +410,31 @@ const MainScene = () => {
             else bullets[i].age = currentTime;
         }
 
-        zombies.forEach((zombie) => {
-            if(zombie.object) {
+        for(let i = zombies.length; i>=0; i--) {
+            let zombie = zombies[i];
+            if(zombie && zombie.object) {
                 if (zombie.mixer) zombie.mixer.update(delta);
                 if (zombie.active) {
                     moveForward(zombie.object);
 
-                    // if (!zombie.recentlyCollided) changeDirectionToPlayer(zombie.object);
+                    if(player && player.box && player.box.position.distanceTo(zombie.object.position) < 10 && !zombie.recentlyCollided){
+
+                        zombie.object.lookAt(new THREE.Vector3(player.box.position.x, zombie.object.position.y, player.box.position.z));
+                    }
 
                     zombie.recentlyCollided = false;
+
                     zombie.object.body.needUpdate = true;
                     zombie.deathStart = currentTime;
                 } else if(currentTime - zombie.deathStart < zombieDieTime) {
                     zombie.mixer.clipAction(zombie.dieAnimation).play();
                 } else {
-                    let zombieObj = zombie.object;
-                    let zombieMesh = zombieObj.children[0];
-                    zombieMesh.geometry.dispose();
-                    zombieMesh.material.forEach(material => material.dispose());
-                    zombieMesh.skeleton.dispose();
-                    scene.remove(zombieObj);
-                    physics.destroy(zombieObj.body);
-                    zombie.deathStart = currentTime + zombieDieTime;
+                    deleteZombie(zombie.object);
+                    zombies.splice(i, 1);
                 }
 
             }
-        });
-
-        zombies = zombies.filter(zombie => zombie.deathStart !== currentTime + zombieDieTime);
+        }
 
         physics.updateDebugger();
 
@@ -436,10 +442,12 @@ const MainScene = () => {
 
         let cameraPosition = getPlayerPosition();
 
-        player.position.x = cameraPosition.x;
-        player.position.y = cameraPosition.y + 3;
-        player.position.z = cameraPosition.z;
-        player.body.needUpdate = true;
+        let playerBox = player.box;
+
+        playerBox.position.x = cameraPosition.x;
+        playerBox.position.y = cameraPosition.y + 3;
+        playerBox.position.z = cameraPosition.z;
+        playerBox.body.needUpdate = true;
 
 
         renderer.render(scene, camera);
@@ -455,10 +463,10 @@ const MainScene = () => {
 
         time = Date.now();
 
-
         //  TODO: health bar
         //  TODO: work on bullet collision
-        // TODO: zombie movement: a random number of zombies will change their direction to player's position
+        //  TODO: replace recentlyCollided with timeFromCollision
+        //  TODO: blood when zombie dies - spheres in random directions
 
     }
     requestAnimationFrame(animate)
