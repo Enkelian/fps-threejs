@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc02b61f-cd3d-45e9-9d95-554c10977cb1" name="Default Changelist" comment="collisions, minor refactoring">
+    <list default="true" id="fc02b61f-cd3d-45e9-9d95-554c10977cb1" name="Default Changelist" comment="deleting bullets done">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/main.js" afterDir="false" />
     </list>
@@ -25,6 +25,14 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="ProjectCodeStyleSettingsMigration">
     <option name="version" value="1" />
@@ -79,7 +87,7 @@
       <workItem from="1609100032436" duration="14859000" />
       <workItem from="1609157761125" duration="22695000" />
       <workItem from="1609251750805" duration="4339000" />
-      <workItem from="1609271057503" duration="6852000" />
+      <workItem from="1609271057503" duration="11807000" />
     </task>
     <task id="LOCAL-00001" summary="pointer lock">
       <created>1609109076281</created>
@@ -95,7 +103,14 @@
       <option name="project" value="LOCAL" />
       <updated>1609276743616</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="deleting bullets done">
+      <created>1609281571707</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1609281571707</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -116,6 +131,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="pointer lock" />
     <MESSAGE value="collisions, minor refactoring" />
-    <option name="LAST_COMMIT_MESSAGE" value="collisions, minor refactoring" />
+    <MESSAGE value="deleting bullets done" />
+    <option name="LAST_COMMIT_MESSAGE" value="deleting bullets done" />
   </component>
 </project>

@@ -222,15 +222,27 @@ const MainScene = () => {
     function addZombie(position, zombieNo) {
         const zombieLoader = new THREE.FBXLoader();
 
-        const zombie = { object: null, mixer: null, zombieCollided: null, recentlyCollided: false};
+        const zombie = {
+            object: null, mixer: null,
+            zombieCollided: null,
+            recentlyCollided: false,
+            health: 1, active: true,
+            walkAnimation: null,
+            dieAnimation: null,
+            deathStart: 0
+        };
 
         zombieLoader.load( './enemies/FBX/Zombie_Female.fbx', object => {
 
             object.name = 'zombie' + zombieNo;
 
             let mixer = new THREE.AnimationMixer(object);
-            let action = mixer.clipAction(object.animations[8]);
-            action.play();
+            // let action = mixer.clipAction(object.animations[8]);
+
+            zombie.walkAnimation = object.animations[8];
+            zombie.dieAnimation = object.animations[6];
+
+            mixer.clipAction(zombie.walkAnimation).play();
 
             object.scale.setScalar(0.01);
 
@@ -250,7 +262,12 @@ const MainScene = () => {
 
             object.body.on.collision((otherObject, event) => {
                 if (otherObject.name === 'bullet'){
-                    console.log('zombie hit!')
+                    zombie.health -= 1;
+                    if(zombie.health <= 0){
+                        zombie.active = false;
+                    }
+                    console.log('zombie hit! health: ' + zombie.health);
+
                 }
                 else if (otherObject.name !== 'ground') {
                     if(zombie.zombieCollided !== otherObject && !zombie.recentlyCollided) {
@@ -362,6 +379,7 @@ const MainScene = () => {
     }
 
     const ageLimit = 500;
+    const zombieDieTime = 5000;
     const animate = () => {
 
         let delta = clock.getDelta();
@@ -384,24 +402,35 @@ const MainScene = () => {
         }
 
         zombies.forEach((zombie) => {
-            if(zombie.mixer) zombie.mixer.update(delta)
-
             if(zombie.object) {
+                if (zombie.mixer) zombie.mixer.update(delta);
+                if (zombie.active) {
+                    moveForward(zombie.object);
 
-                moveForward(zombie.object);
+                    // if (!zombie.recentlyCollided) changeDirectionToPlayer(zombie.object);
 
-                if(!zombie.recentlyCollided){
-                    changeDirectionToPlayer(zombie.object);
+                    zombie.recentlyCollided = false;
+                    zombie.object.body.needUpdate = true;
+                    zombie.deathStart = currentTime;
+                } else if(currentTime - zombie.deathStart < zombieDieTime) {
+                    zombie.mixer.clipAction(zombie.dieAnimation).play();
+                } else {
+                    let zombieObj = zombie.object;
+                    let zombieMesh = zombieObj.children[0];
+                    zombieMesh.geometry.dispose();
+                    zombieMesh.material.forEach(material => material.dispose());
+                    zombieMesh.skeleton.dispose();
+                    scene.remove(zombieObj);
+                    physics.destroy(zombieObj.body);
+                    zombie.deathStart = currentTime + zombieDieTime;
                 }
-                zombie.recentlyCollided = false;
-                zombie.object.body.needUpdate = true;
-            }
 
+            }
         });
 
+        zombies = zombies.filter(zombie => zombie.deathStart !== currentTime + zombieDieTime);
 
         physics.updateDebugger();
-
 
         camera.updateMatrixWorld();
 
