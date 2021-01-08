@@ -294,10 +294,8 @@ const MainScene = () => {
                         console.log('zombie hit! health: ' + zombie.health);
 
                     } else if (otherObject.name !== 'ground') {
-                        if (
-                            zombie.zombieCollided !== otherObject &&
-                            !zombie.recentlyCollided) {
-                            let randomRotation = Math.random() * Math.PI + Math.PI / 2;
+                        if (zombie.zombieCollided !== otherObject &&  !zombie.recentlyCollided) {
+                            let randomRotation = (0.5 - Math.random()) * Math.PI /2 + Math.PI; //
                             object.rotation.y += randomRotation;
                             zombie.zombieCollided = otherObject;
                             zombie.recentlyCollided = true;
@@ -326,13 +324,14 @@ const MainScene = () => {
     const zombieZs = [ {min: -75, max: -55}, {min: -45, max: -25}, {min: -15, max: 15}, {min: 25, max: 45},  {min: 55, max: 75} ];
 
     const areasNo = zombieXs.length;
+
     function getRandomPosition(){
 
         let areaXIdx = Math.floor(Math.random() * areasNo);
         let areaZIdx = Math.floor(Math.random() * areasNo);
 
         let x = zombieXs[areaXIdx].min + Math.floor(Math.random() * (zombieXs[areaXIdx].max - zombieXs[areaXIdx].min));
-        let z = zombieXs[areaZIdx].min + Math.floor(Math.random() * zombieXs[areaZIdx].max - zombieXs[areaZIdx].min);
+        let z = zombieZs[areaZIdx].min + Math.floor(Math.random() * zombieZs[areaZIdx].max - zombieZs[areaZIdx].min);
 
         return new THREE.Vector3(x, 0.5, z);
     }
@@ -657,12 +656,11 @@ const MainScene = () => {
         let timeLeftPercent = 100 - 100 * (Date.now() - extraTime - startTime)/maxGameTime;
         document.getElementById("timeBar").style.width = timeLeftPercent + '%';
 
-        // controls.isOnObject(false);
-
 
         //  TODO: count of zombies killed in time
         //  TODO: disable walking into buildings
-        //  TODO: zombies should have a smaller angle when rotating after colliding
+        //  TODO: screens
+        //  TODO: bloodFountain improvements
 
     }
     requestAnimationFrame(animate)
