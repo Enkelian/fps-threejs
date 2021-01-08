@@ -5,6 +5,41 @@ let controls, time = Date.now();
 
 const MainScene = () => {
 
+    let animationPlaying = false;
+
+    THREE.DefaultLoadingManager.onStart = function ( url, itemsLoaded, itemsTotal ) {
+
+
+        console.log( 'Started loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
+
+    };
+
+    THREE.DefaultLoadingManager.onLoad = function ( ) {
+
+        console.log( 'Loading Complete!');
+        document.getElementById("timeBar").style.visibility = "visible";
+        document.getElementById("loader").style.visibility = "hidden";
+
+        animationPlaying = true;
+        requestAnimationFrame(animate);
+
+
+
+    };
+
+
+    THREE.DefaultLoadingManager.onProgress = function ( url, itemsLoaded, itemsTotal ) {
+
+        console.log( 'Loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
+
+    };
+
+    THREE.DefaultLoadingManager.onError = function ( url ) {
+
+        console.log( 'There was an error loading ' + url );
+
+    };
+
 
     const instructions = document.getElementById( 'instructions' );
 
@@ -87,6 +122,16 @@ const MainScene = () => {
 
         instructions.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
     }
+
+    const loader = new THREE.TextureLoader();
+    const texture = loader.load(
+        'Skyboxes/GreenSky.png',
+        () => {
+            const rt = new THREE.WebGLCubeRenderTarget(texture.image.height);
+            rt.fromEquirectangularTexture(renderer, texture);
+            scene.background = rt;
+        });
+
 
     let maxGameTime = 100000;
     let extraTime = 0;
@@ -171,12 +216,10 @@ const MainScene = () => {
 
         box.body.on.collision((otherObject, event) => {
             if(otherObject.name !== 'ground'){
-                // controls.isOnObject(true);
-                // console.log('is on object')
+                //here handle collision with buildings
             }
             if (otherObject.name.startsWith('zombie')) {
                 extraTime-=80;
-                console.log(extraTime)
             }
         });
 
@@ -237,6 +280,7 @@ const MainScene = () => {
     let zombies = [];
     let inactiveZombies = [];
     let maxActiveZombies = 20;
+    let zombiesKilled = 0;
 
     const zombieLoader = new THREE.FBXLoader();
 
@@ -338,7 +382,6 @@ const MainScene = () => {
 
     function getRandomSkin(){
         let random = Math.random();
-        console.log(random)
         if(random < 0.5) return 'Zombie_Male';
         else return 'Zombie_Female'
     }
@@ -408,12 +451,12 @@ const MainScene = () => {
     window.addEventListener("mousedown", onMouseDown);
     let bullets = [];
 
-    const gunTranslation = new THREE.Vector3(0.95, 0, 0);
+    const gunTranslation = new THREE.Vector3(0.95, -0.05, 0);
     const gunRotationY = -1.5;
     let gunFocused = -1;
 
     function fireBullet(){
-        let geometry = new THREE.SphereGeometry(0.01, 3, 3);
+        let geometry = new THREE.SphereGeometry(0.04, 3, 3);
         let material = new THREE.MeshLambertMaterial({ color: 0x9D8420 });
         let bullet = new THREE.Mesh(geometry, material);
 
@@ -484,7 +527,7 @@ const MainScene = () => {
 
     function bloodFlow(bloodDrop){
         bloodDrop.position.x += Math.random();
-        bloodDrop.position.y += Math.random();        //  TODO: count of zombies killed in time
+        bloodDrop.position.y += Math.random();
         bloodDrop.position.z += Math.random();
     }
 
@@ -527,6 +570,8 @@ const MainScene = () => {
 
 
     const animate = () => {
+
+        if(!animationPlaying) return;
 
         let delta = clock.getDelta();
 
@@ -591,6 +636,7 @@ const MainScene = () => {
                 } else if(currentTime - zombie.deathStart < zombieDieTime) {
                     zombie.mixer.clipAction(zombie.dieAnimation).play();
                     extraTime += 100;
+                    zombiesKilled++;
                 } else {
 
                     zombie.mixer.stopAllAction();
@@ -600,7 +646,7 @@ const MainScene = () => {
                     zombie.active = false;
                     inactiveZombies.push(zombie);
 
-                    zombie.object.position.set(getRandomPosition());
+                    zombie.object.position.copy(getRandomPosition());
                     zombie.object.body.needUpdate = true;
 
                     zombies.splice(i, 1);
@@ -654,15 +700,14 @@ const MainScene = () => {
         time = Date.now();
 
         let timeLeftPercent = 100 - 100 * (Date.now() - extraTime - startTime)/maxGameTime;
+        if(timeLeftPercent - 0.001 < 0) animationPlaying = false;
+
         document.getElementById("timeBar").style.width = timeLeftPercent + '%';
 
-
-        //  TODO: count of zombies killed in time
         //  TODO: disable walking into buildings
         //  TODO: screens
         //  TODO: bloodFountain improvements
 
     }
-    requestAnimationFrame(animate)
 }
 PhysicsLoader('./lib', () => MainScene())
