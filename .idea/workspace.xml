@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc02b61f-cd3d-45e9-9d95-554c10977cb1" name="Default Changelist" comment="zombies follow when close, more buildings">
+    <list default="true" id="fc02b61f-cd3d-45e9-9d95-554c10977cb1" name="Default Changelist" comment="animations repaired">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/PointerLockControls.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/PointerLockControls.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/main.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -81,7 +83,17 @@
       <workItem from="1609373486979" duration="1092000" />
       <workItem from="1609414509410" duration="3813000" />
       <workItem from="1609426191125" duration="8386000" />
-      <workItem from="1609507789961" duration="348000" />
+      <workItem from="1609507789961" duration="4022000" />
+      <workItem from="1609518436375" duration="114000" />
+      <workItem from="1609519776620" duration="1199000" />
+      <workItem from="1609718859805" duration="2400000" />
+      <workItem from="1609760742820" duration="59000" />
+      <workItem from="1609881058184" duration="1360000" />
+      <workItem from="1609884284382" duration="155000" />
+      <workItem from="1609884536556" duration="6785000" />
+      <workItem from="1609929882835" duration="108000" />
+      <workItem from="1610020605612" duration="3248000" />
+      <workItem from="1610111263319" duration="4331000" />
     </task>
     <task id="LOCAL-00001" summary="pointer lock">
       <created>1609109076281</created>
@@ -118,7 +130,14 @@
       <option name="project" value="LOCAL" />
       <updated>1609290366001</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="animations repaired">
+      <created>1609508380609</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1609508380609</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -142,6 +161,7 @@
     <MESSAGE value="deleting bullets done" />
     <MESSAGE value="zombie death done" />
     <MESSAGE value="zombies follow when close, more buildings" />
-    <option name="LAST_COMMIT_MESSAGE" value="zombies follow when close, more buildings" />
+    <MESSAGE value="animations repaired" />
+    <option name="LAST_COMMIT_MESSAGE" value="animations repaired" />
   </component>
 </project>

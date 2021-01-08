@@ -88,6 +88,9 @@ const MainScene = () => {
         instructions.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
     }
 
+    let maxGameTime = 100000;
+    let extraTime = 0;
+
     const scene = new THREE.Scene()
     scene.background = new THREE.Color(0xf0f0f0)
 
@@ -146,7 +149,6 @@ const MainScene = () => {
 
             } );
 
-
             camera.add( object );
 
         } );
@@ -154,7 +156,7 @@ const MainScene = () => {
 
     createGun();
 
-    const player = { box: null, health: 100}
+    const player = { box: null }
 
     function setCharacterBox(){
         let boxGeometry = new THREE.BoxGeometry(3, 3, 3);
@@ -167,15 +169,14 @@ const MainScene = () => {
 
         box.body.setCollisionFlags(2);
 
-
         box.body.on.collision((otherObject, event) => {
             if(otherObject.name !== 'ground'){
                 // controls.isOnObject(true);
                 // console.log('is on object')
             }
             if (otherObject.name.startsWith('zombie')) {
-                player.health--;
-                console.log('Player collided with zombie. Remaining health: ' + player.health)
+                extraTime-=80;
+                console.log(extraTime)
             }
         });
 
@@ -213,19 +214,29 @@ const MainScene = () => {
         } );
     }
 
-    addBuilding({x: 0, y: 0, z: -10}, '1Story_Mat');
-    addBuilding({x: 20, y: 0, z: -10}, '2Story_Mat');
-    addBuilding({x: 40, y: 0, z: 40}, '2Story_Sign_Mat', Math.PI);
-    addBuilding({x: 20, y: 0, z: 40}, '1Story_Sign_Mat', Math.PI);
-    addBuilding({x: 0, y: 0, z: 40}, '1Story_Sign_Mat', Math.PI);
-    addBuilding({x: 0, y: 0, z: 80}, '1Story_Sign_Mat', Math.PI);
-    addBuilding({x: 20, y: 0, z: 80}, '3Story_Small_Mat', Math.PI);
-    addBuilding({x: 40, y: 0, z: 80}, '4Story_Mat', Math.PI);
+    const zs = [-80, -50, -20, 20, 50, 80];
+    const xs = [-80, -60, -20, 20, 60, 80];
+
+    const buildingTypes = ['1Story_Mat', '2Story_Mat', '2Story_Sign_Mat', '1Story_Sign_Mat'];
+    const buildingTypesLen = buildingTypes.length;
+
+    zs.forEach( z =>
+        xs.forEach( x => {
+
+            let randBuildingTypeIdx = Math.floor(Math.random() * buildingTypesLen)
+            let rotation = z < 0 ? 0 : Math.PI;
+            addBuilding({x: x, y: 0, z: z}, buildingTypes[randBuildingTypeIdx], rotation);
+
+            }
+
+        )
+    )
+
 
     let zombieNo = 0;
     let zombies = [];
     let inactiveZombies = [];
-    let maxActiveZombies = 3;
+    let maxActiveZombies = 20;
 
     const zombieLoader = new THREE.FBXLoader();
 
@@ -283,7 +294,9 @@ const MainScene = () => {
                         console.log('zombie hit! health: ' + zombie.health);
 
                     } else if (otherObject.name !== 'ground') {
-                        if (zombie.zombieCollided !== otherObject && !zombie.recentlyCollided) {
+                        if (
+                            zombie.zombieCollided !== otherObject &&
+                            !zombie.recentlyCollided) {
                             let randomRotation = Math.random() * Math.PI + Math.PI / 2;
                             object.rotation.y += randomRotation;
                             zombie.zombieCollided = otherObject;
@@ -309,12 +322,32 @@ const MainScene = () => {
 
     }
 
+    const zombieXs = [ {min: -75, max: -65}, {min: -55, max: -25}, {min: -15, max: 15}, {min: 25, max: 55},  {min: 65, max: 75} ];
+    const zombieZs = [ {min: -75, max: -55}, {min: -45, max: -25}, {min: -15, max: 15}, {min: 25, max: 45},  {min: 55, max: 75} ];
 
-    addZombie(new THREE.Vector3(0, 0.5, 10), zombieNo++, 'Zombie_Male');
-    addZombie(new THREE.Vector3(0, 0.5, 15), zombieNo++, 'Zombie_Male');
-    addZombie(new THREE.Vector3(10, 0.5, 10), zombieNo++, 'Zombie_Female');
-    addZombie(new THREE.Vector3(15, 0.5, 10), zombieNo++, 'Zombie_Female');
-    addZombie(new THREE.Vector3(15, 0.5, 10), zombieNo++, 'Zombie_Male');
+    const areasNo = zombieXs.length;
+    function getRandomPosition(){
+
+        let areaXIdx = Math.floor(Math.random() * areasNo);
+        let areaZIdx = Math.floor(Math.random() * areasNo);
+
+        let x = zombieXs[areaXIdx].min + Math.floor(Math.random() * (zombieXs[areaXIdx].max - zombieXs[areaXIdx].min));
+        let z = zombieXs[areaZIdx].min + Math.floor(Math.random() * zombieXs[areaZIdx].max - zombieXs[areaZIdx].min);
+
+        return new THREE.Vector3(x, 0.5, z);
+    }
+
+    function getRandomSkin(){
+        let random = Math.random();
+        console.log(random)
+        if(random < 0.5) return 'Zombie_Male';
+        else return 'Zombie_Female'
+    }
+
+
+    for(zombieNo; zombieNo < 10; zombieNo < maxActiveZombies)
+        addZombie(getRandomPosition(), zombieNo++, getRandomSkin());
+
 
     function deleteZombie(zombieObj){
         let zombieMesh = zombieObj.children[0];
@@ -328,7 +361,7 @@ const MainScene = () => {
     function moveForward(zombieObj){
         let vector = new THREE.Vector3( 0, 0, 1 );
         vector.applyQuaternion( zombieObj.quaternion );
-        vector.divideScalar(50);
+        vector.divideScalar(30);
         zombieObj.position.add(vector);
     }
 
@@ -339,25 +372,27 @@ const MainScene = () => {
     }
 
 
-    const ground = physics.add.ground({ name: 'ground', width: 300, height: 200 }, { lambert: { color: 0x504746 } })
+
+
+    const ground = physics.add.ground({ name: 'ground', width: 200, height: 200 }, { lambert: { color: 0x504746 } })
     ground.receiveShadow = true;
     ground.castShadow = true;
 
-    const wall1 = physics.add.box({ width: 300, height: 30, y: 15, z: 100, collisionFlags: 2}, { lambert: { color: 'hotpink', transparent: true, opacity: 0 } });
+    const wall1 = physics.add.box({ width: 200, height: 30, y: 15, z: 100, collisionFlags: 2}, { lambert: { color: 'hotpink', transparent: true, opacity: 0 } });
     scene.add(wall1);
 
-    const wall2 = physics.add.box({ width: 300, height: 30, y: 15, z: -100, collisionFlags: 2}, { lambert: { color: 'hotpink', transparent: true, opacity: 0 } });
+    const wall2 = physics.add.box({ width: 200, height: 30, y: 15, z: -100, collisionFlags: 2}, { lambert: { color: 'hotpink', transparent: true, opacity: 0 } });
     scene.add(wall2);
 
-    const wall3 = factory.add.box({ width: 200, height: 30, x: 149, y: 15}, { lambert: { color: 'hotpink', transparent: true, opacity: 0 } });
-    wall3.collisionFlags = 2;
+    const wall3 = factory.add.box({ width: 200, height: 30, x: 100, y: 15}, { lambert: { color: 'hotpink', transparent: true, opacity: 0 } });
     wall3.rotation.y = Math.PI/2;
     physics.add.existing(wall3);
+    wall3.body.setCollisionFlags(2);
 
-    const wall4 = factory.add.box({ width: 200, height: 30, x: -149, y: 15}, { lambert: { color: 'hotpink', transparent: true, opacity: 0 } });
-    wall4.collisionFlags = 2;
+    const wall4 = factory.add.box({ width: 200, height: 30, x: -100, y: 15}, { lambert: { color: 'hotpink', transparent: true, opacity: 0 } });
     wall4.rotation.y = Math.PI/2;
     physics.add.existing(wall4);
+    wall4.body.setCollisionFlags(2);
 
 
     const clock = new THREE.Clock()
@@ -374,7 +409,8 @@ const MainScene = () => {
     window.addEventListener("mousedown", onMouseDown);
     let bullets = [];
 
-    const gunTranslation = new THREE.Vector3(0.7, 0, 0);
+    const gunTranslation = new THREE.Vector3(0.95, 0, 0);
+    const gunRotationY = -1.5;
     let gunFocused = -1;
 
     function fireBullet(){
@@ -449,7 +485,7 @@ const MainScene = () => {
 
     function bloodFlow(bloodDrop){
         bloodDrop.position.x += Math.random();
-        bloodDrop.position.y += Math.random();
+        bloodDrop.position.y += Math.random();        //  TODO: count of zombies killed in time
         bloodDrop.position.z += Math.random();
     }
 
@@ -462,6 +498,7 @@ const MainScene = () => {
         gun.position.x += gunFocused * gunTranslation.x;
         gun.position.y += gunFocused * gunTranslation.y;
         gun.position.z += gunFocused * gunTranslation.z;
+        gun.rotation.y -= gunFocused *  0.05;
 
         emitter.position.x += 2 * gunFocused * gunTranslation.x;
         emitter.position.y += gunFocused * gunTranslation.y;
@@ -479,9 +516,6 @@ const MainScene = () => {
         }
     }
 
-    function getRandomPosition(){
-        return new THREE.Vector3(Math.random(), 0.5, Math.random());
-    }
 
     const bulletAgeLimit = 500;
     const bloodAgeLimit = 1000;
@@ -489,6 +523,8 @@ const MainScene = () => {
 
     let newZombieSpawnTime = 10000;
     let lastSpawnTime = Date.now();
+
+    const startTime = Date.now();
 
 
     const animate = () => {
@@ -539,13 +575,14 @@ const MainScene = () => {
         for(let i = zombies.length; i>=0; i--) {
             let zombie = zombies[i];
             if(zombie && zombie.object) {
-                if (zombie.mixer) zombie.mixer.update(delta * 2);
+                if (zombie.mixer) zombie.mixer.update(delta * 4);
                 if (zombie.active) {
 
                     moveForward(zombie.object);
 
-                    if(player && player.box && player.box.position.distanceTo(zombie.object.position) < 10 && !zombie.recentlyCollided){
+                    if(player?.box?.position?.distanceTo(zombie.object.position) < 10 && !zombie.recentlyCollided) {
                         zombie.object.lookAt(new THREE.Vector3(player.box.position.x, zombie.object.position.y, player.box.position.z));
+                        zombie.zombieCollided = player;
                     }
 
                     zombie.recentlyCollided = false;
@@ -554,13 +591,19 @@ const MainScene = () => {
 
                 } else if(currentTime - zombie.deathStart < zombieDieTime) {
                     zombie.mixer.clipAction(zombie.dieAnimation).play();
+                    extraTime += 100;
                 } else {
+
+                    zombie.mixer.stopAllAction();
+                    bloodFountain(zombie.object.position);
+
                     zombie.object.visible = false;
                     zombie.active = false;
                     inactiveZombies.push(zombie);
-                    zombie.mixer.stopAllAction();
-                    bloodFountain(zombie.object.position);
-                    // deleteZombie(zombie.object);
+
+                    zombie.object.position.set(getRandomPosition());
+                    zombie.object.body.needUpdate = true;
+
                     zombies.splice(i, 1);
                 }
 
@@ -581,7 +624,6 @@ const MainScene = () => {
         playerBox.body.needUpdate = true;
 
         if(currentTime - lastSpawnTime > newZombieSpawnTime){
-            console.log('new spawn')
             lastSpawnTime = currentTime;
             if(newZombieSpawnTime > 5000) newZombieSpawnTime -= 100;
 
@@ -591,14 +633,9 @@ const MainScene = () => {
                 newZombie.health = 2;
                 newZombie.object.visible = true;
                 newZombie.active = true;
-                // TODO: set position to random
                 newZombie.mixer.clipAction(newZombie.walkAnimation).play();
-                // newZombie.mixer.actions
-                console.log(newZombie.mixer.stats);
 
             }
-
-            // addZombie(getRandomPosition(), zombieNo++, 'Zombie_Female');
 
         }
 
@@ -608,6 +645,7 @@ const MainScene = () => {
         physics.update(clock.getDelta() * 1000000000)
 
 
+
         requestAnimationFrame(animate);
 
         controls.update( Date.now() - time );
@@ -615,13 +653,16 @@ const MainScene = () => {
         renderer.render( scene, camera );
 
         time = Date.now();
+
+        let timeLeftPercent = 100 - 100 * (Date.now() - extraTime - startTime)/maxGameTime;
+        document.getElementById("timeBar").style.width = timeLeftPercent + '%';
+
         // controls.isOnObject(false);
 
-        //  TODO: health bar
-        //  TODO: replace recentlyCollided with timeFromCollision
-        //  TODO: limited time for zombie elimination
-    //    TODO: loading screen, defeat screen, victory screen
-        //TODO: one animation mixer for zombies?
+
+        //  TODO: count of zombies killed in time
+        //  TODO: disable walking into buildings
+        //  TODO: zombies should have a smaller angle when rotating after colliding
 
     }
     requestAnimationFrame(animate)
