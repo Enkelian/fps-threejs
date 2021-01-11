@@ -20,8 +20,10 @@ const MainScene = () => {
         document.getElementById("timeBar").style.visibility = "visible";
         document.getElementById("loader").style.visibility = "hidden";
 
-        animationPlaying = true;
-        requestAnimationFrame(animate);
+
+        startAnimation();
+        // animationPlaying = true;
+        // requestAnimationFrame(animate);
 
 
 
@@ -163,15 +165,16 @@ const MainScene = () => {
     const physics = new AmmoPhysics(scene)
 
     physics.gravity = { x: 0, y: -10, z: 0 };
-    physics.debug.enable(true)
+    // physics.debug.enable(true)
 
 
     const { factory } = physics
 
+    let gun;
 
     function createGun(){
-        const pistol = new THREE.FBXLoader();
-        pistol.load( './guns/FBX/Pistol.fbx', object => {
+        const loader = new THREE.FBXLoader();
+        loader.load( './guns/FBX/Pistol.fbx', object => {
 
             object.name = 'gun';
             object.scale.setScalar(0.001);
@@ -195,6 +198,7 @@ const MainScene = () => {
             } );
 
             camera.add( object );
+            gun = object;
 
         } );
     }
@@ -204,7 +208,7 @@ const MainScene = () => {
     const player = { box: null }
 
     function setCharacterBox(){
-        let boxGeometry = new THREE.BoxGeometry(3, 3, 3);
+        let boxGeometry = new THREE.BoxGeometry(3, 4, 3);
         let boxMaterial = new THREE.MeshPhongMaterial({transparent: true, opacity: 0.1, color: 0x000000});
         let box = new THREE.Mesh(boxGeometry, boxMaterial);
         box.name = 'player';
@@ -215,10 +219,8 @@ const MainScene = () => {
         box.body.setCollisionFlags(2);
 
         box.body.on.collision((otherObject, event) => {
-            if(otherObject.name !== 'ground'){
-                //here handle collision with buildings
-            }
-            if (otherObject.name.startsWith('zombie')) {
+
+            if (otherObject.name.startsWith('zombie') && !inactiveZombies[otherObject.name]) {
                 extraTime-=80;
             }
         });
@@ -247,7 +249,7 @@ const MainScene = () => {
             buildings.push(object);
 
             const compound = [
-                { shape: 'box', width: 10, height: 8, depth: 10, mass: 10000000000, y: object.position.y + 3.5 }
+                { shape: 'box', width: 11, height: 8, depth: 11, mass: 10000000000, y: object.position.y + 3.5 }
             ]
             physics.add.existing(object, {compound});
             object.body.setCollisionFlags(2);
@@ -278,9 +280,10 @@ const MainScene = () => {
 
     let zombieNo = 0;
     let zombies = [];
-    let inactiveZombies = [];
+    let inactiveZombies = {};
     let maxActiveZombies = 20;
     let zombiesKilled = 0;
+    let zombieHealth = 4;
 
     const zombieLoader = new THREE.FBXLoader();
 
@@ -291,7 +294,7 @@ const MainScene = () => {
             mixer: null,
             zombieCollided: null,
             recentlyCollided: false,
-            health: 4,
+            health: zombieHealth,
             active: true,
             walkAnimation: null,
             dieAnimation: null,
@@ -353,7 +356,7 @@ const MainScene = () => {
 
                 if (zombieNo < maxActiveZombies) zombies.push(zombie);
                 else{
-                    inactiveZombies.push(zombie);
+                    inactiveZombies[zombie.object.name] = zombie;
                     zombie.object.visible = false;
                     zombie.active = false;
                 }
@@ -391,15 +394,6 @@ const MainScene = () => {
         addZombie(getRandomPosition(), zombieNo++, getRandomSkin());
 
 
-    function deleteZombie(zombieObj){
-        let zombieMesh = zombieObj.children[0];
-        zombieMesh.geometry.dispose();
-        zombieMesh.material.forEach(material => material.dispose());
-        zombieMesh.skeleton.dispose();
-        scene.remove(zombieObj);
-        physics.destroy(zombieObj.body);
-    }
-
     function moveForward(zombieObj){
         let vector = new THREE.Vector3( 0, 0, 1 );
         vector.applyQuaternion( zombieObj.quaternion );
@@ -412,8 +406,6 @@ const MainScene = () => {
         vector.applyMatrix4(camera.matrixWorld);
         return vector;
     }
-
-
 
 
     const ground = physics.add.ground({ name: 'ground', width: 200, height: 200 }, { lambert: { color: 0x504746 } })
@@ -452,13 +444,14 @@ const MainScene = () => {
     let bullets = [];
 
     const gunTranslation = new THREE.Vector3(0.95, -0.05, 0);
-    const gunRotationY = -1.5;
     let gunFocused = -1;
 
+    const bulletGeometry = new THREE.SphereGeometry(0.04, 3, 3);
+    const bulletMaterial = new THREE.MeshLambertMaterial({ color: 0x9D8420 });
+
     function fireBullet(){
-        let geometry = new THREE.SphereGeometry(0.04, 3, 3);
-        let material = new THREE.MeshLambertMaterial({ color: 0x9D8420 });
-        let bullet = new THREE.Mesh(geometry, material);
+
+        let bullet = new THREE.Mesh(bulletGeometry, bulletMaterial);
 
         bullet.name = 'bullet';
 
@@ -474,16 +467,21 @@ const MainScene = () => {
 
         bullet.body.setCcdMotionThreshold(1);
 
-        bullet.body.setCcdSweptSphereRadius(0.01);
-        bullets.push({object: bullet, age: Date.now()});
+        bullet.body.setCcdSweptSphereRadius(0.02);
+        bullets.push({object: bullet, birthTime: Date.now()});
 
     }
 
 
+    const bloodGeometries = [new THREE.SphereGeometry(0.1, 3, 3)];
+    const bloodMaterial = new THREE.MeshLambertMaterial({ color: 0xff0000 });
+
+    const bloodGeometriesLen = 5;
+    for(let i = 1; i < bloodGeometriesLen; i++) bloodGeometries.push(new THREE.SphereGeometry(Math.random() * 0.3, 5, 5));
+
     function bleed(zombieObj){
-        let geometry = new THREE.SphereGeometry(0.1, 3, 3);
-        let material = new THREE.MeshLambertMaterial({ color: 0xff0000 });
-        let bloodDrop = new THREE.Mesh(geometry, material);
+
+        let bloodDrop = new THREE.Mesh(bloodGeometries[0], bloodMaterial);
 
         bloodDrop.name = 'blood';
 
@@ -491,29 +489,27 @@ const MainScene = () => {
         bloodDrop.position.y += 2;
 
         scene.add(bloodDrop);
-        physics.add.existing(bloodDrop, {mass: 0.1, collisionFlags: 0});
+        physics.add.existing(bloodDrop, {mass: 0.085, collisionFlags: 0});
 
         bloodDrop.body.applyForceX((Math.random() - 0.5) * 2);
-        // bloodDrop.body.applyForceY((Math.random() * 10);
         bloodDrop.body.applyForceZ((Math.random() - 0.5) * 2);
 
-        blood.push({object: bloodDrop, age: Date.now()});
+        blood.push({object: bloodDrop, birthTime: Date.now()});
     }
 
     let blood = [];
 
 
     function bloodFountain(zombiePos){
-        for(let i = 0; i < 20; i++) {
-            let geometry = new THREE.SphereGeometry(Math.random() * 0.3, 5, 5);
-            let material = new THREE.MeshLambertMaterial({color: 0xff0000});
-            let bloodDrop = new THREE.Mesh(geometry, material);
+        for(let i = 0; i < 15; i++) {
+
+            let bloodDrop = new THREE.Mesh(bloodGeometries[Math.floor(Math.random() * bloodGeometriesLen)], bloodMaterial);
 
             bloodDrop.name = 'blood';
 
             bloodDrop.position.copy(zombiePos);
 
-            physics.add.existing(bloodDrop, {mass: 1,collisionFlags: 0});
+            physics.add.existing(bloodDrop, {mass: 1 ,collisionFlags: 0});
 
             bloodDrop.body.applyForceX((Math.random() - 0.5) * 10);
             bloodDrop.body.applyForceY(Math.random() * 20);
@@ -521,21 +517,18 @@ const MainScene = () => {
 
             scene.add(bloodDrop);
 
-            blood.push({object: bloodDrop, age: Date.now()});
+            blood.push({object: bloodDrop, birthTime: Date.now()});
         }
     }
 
     function bloodFlow(bloodDrop){
-        bloodDrop.position.x += Math.random();
-        bloodDrop.position.y += Math.random();
-        bloodDrop.position.z += Math.random();
+        bloodDrop.position.x += (Math.random() - 0.5) * 0.1;
+        bloodDrop.position.y += Math.random() * 0.1;
+        bloodDrop.position.z += (Math.random() - 0.5) * 0.1;
     }
 
 
     function gunFocus(){
-
-        let gun = camera.getObjectByName('gun');
-        if(!gun) return;
 
         gun.position.x += gunFocused * gunTranslation.x;
         gun.position.y += gunFocused * gunTranslation.y;
@@ -558,6 +551,44 @@ const MainScene = () => {
         }
     }
 
+    function resetAnimationSpecifics() {
+        newZombieSpawnTime = 10000;
+        lastSpawnTime = Date.now();
+        startTime = Date.now();
+        extraTime = 0;
+        activateAllZombies();
+    }
+
+    function stopAnimation() {
+        animationPlaying = false;
+    }
+
+    function startAnimation(){
+        animationPlaying = true;
+        requestAnimationFrame(animate);
+    }
+
+
+    function activateAllZombies(){
+        for(let element in inactiveZombies) activateOneZombie();
+    }
+
+    function activateOneZombie(){
+        let newZombie, zombieName;
+        for(zombieName in inactiveZombies){
+            newZombie = inactiveZombies[zombieName];
+            delete inactiveZombies[zombieName];
+            break;
+        }
+
+        newZombie.health = zombieHealth;
+        newZombie.object.visible = true;
+        newZombie.active = true;
+        newZombie.mixer.clipAction(newZombie.walkAnimation).play();
+        zombies.push(newZombie);
+    }
+
+
 
     const bulletAgeLimit = 500;
     const bloodAgeLimit = 1000;
@@ -566,7 +597,7 @@ const MainScene = () => {
     let newZombieSpawnTime = 10000;
     let lastSpawnTime = Date.now();
 
-    const startTime = Date.now();
+    let startTime = Date.now();
 
 
     const animate = () => {
@@ -579,38 +610,28 @@ const MainScene = () => {
 
         for (let i = bullets.length - 1; i >= 0; i--) {
             let bullet = bullets[i].object;
-            let bulletAge = bullets[i].age;
             if(bullet && bullet.geometry && bullet.material) {
-                if (currentTime - bulletAge > bulletAgeLimit) {
-                    bullet.geometry.dispose();
-                    bullet.material.dispose();
+                if (currentTime - bullets[i].birthTime > bulletAgeLimit) {
                     scene.remove(bullet);
                     physics.destroy(bullet.body);
                     bullets.splice(i, 1);
                 }
-            }
-            else{
-                bullets[i].age = currentTime;
-                bullet.body.needsUpdate = true;
+                else bullet.body.needsUpdate = true;
             }
         }
 
         for (let i = blood.length - 1; i >= 0; i--) {
             let bloodDrop = blood[i].object;
-            let age = blood[i].age;
             if(bloodDrop) {
                 if (bloodDrop.geometry && bloodDrop.material) {
-                    if (currentTime - age > bloodAgeLimit) {
-                        bloodDrop.geometry.dispose();
-                        bloodDrop.material.dispose();
+                    if (currentTime - blood[i].birthTime > bloodAgeLimit) {
                         scene.remove(bloodDrop);
                         physics.destroy(bloodDrop.body);
                         blood.splice(i, 1);
+                    } else {
+                        // bloodFlow(bloodDrop);
+                        bloodDrop.body.needsUpdate = true;
                     }
-                } else {
-                    blood[i].age = currentTime;
-                    bloodFlow(bloodDrop);
-                    bloodDrop.body.needsUpdate = true;
                 }
             }
         }
@@ -619,7 +640,9 @@ const MainScene = () => {
         for(let i = zombies.length; i>=0; i--) {
             let zombie = zombies[i];
             if(zombie && zombie.object) {
-                if (zombie.mixer) zombie.mixer.update(delta * 4);
+
+                if (zombie.mixer) zombie.mixer.update(delta * 2);
+
                 if (zombie.active) {
 
                     moveForward(zombie.object);
@@ -634,9 +657,11 @@ const MainScene = () => {
                     zombie.deathStart = currentTime;
 
                 } else if(currentTime - zombie.deathStart < zombieDieTime) {
+
                     zombie.mixer.clipAction(zombie.dieAnimation).play();
-                    extraTime += 100;
+                    extraTime += 200;
                     zombiesKilled++;
+
                 } else {
 
                     zombie.mixer.stopAllAction();
@@ -644,7 +669,7 @@ const MainScene = () => {
 
                     zombie.object.visible = false;
                     zombie.active = false;
-                    inactiveZombies.push(zombie);
+                    inactiveZombies[zombie.object.name] = zombie;
 
                     zombie.object.position.copy(getRandomPosition());
                     zombie.object.body.needUpdate = true;
@@ -655,7 +680,7 @@ const MainScene = () => {
             }
         }
 
-        physics.updateDebugger();
+        // physics.updateDebugger();
 
         camera.updateMatrixWorld();
 
@@ -672,39 +697,27 @@ const MainScene = () => {
             lastSpawnTime = currentTime;
             if(newZombieSpawnTime > 5000) newZombieSpawnTime -= 100;
 
-            if(inactiveZombies?.length) {
-                let newZombie = inactiveZombies.pop();
-                zombies.push(newZombie);
-                newZombie.health = 2;
-                newZombie.object.visible = true;
-                newZombie.active = true;
-                newZombie.mixer.clipAction(newZombie.walkAnimation).play();
-
-            }
+            if(Object.keys(inactiveZombies).length !== 0) activateOneZombie();
 
         }
 
-
         renderer.render(scene, camera);
 
-        physics.update(clock.getDelta() * 1000000000)
-
-
+        physics.update(clock.getDelta() * 1000000000);
 
         requestAnimationFrame(animate);
 
         controls.update( Date.now() - time );
 
-        renderer.render( scene, camera );
+        // renderer.render(scene, camera);
 
         time = Date.now();
 
-        let timeLeftPercent = 100 - 100 * (Date.now() - extraTime - startTime)/maxGameTime;
-        if(timeLeftPercent - 0.001 < 0) animationPlaying = false;
+        let timeLeftPercent = 100 - 100 * (time - extraTime - startTime)/maxGameTime;
+        if(timeLeftPercent - 0.001 < 0) stopAnimation();
 
         document.getElementById("timeBar").style.width = timeLeftPercent + '%';
 
-        //  TODO: disable walking into buildings
         //  TODO: screens
         //  TODO: bloodFountain improvements
 
