@@ -132,7 +132,7 @@ const MainScene = () => {
 
     const loader = new THREE.TextureLoader();
     const texture = loader.load(
-        'Skyboxes/GreenSky.png',
+        './res/skyboxes/GreenSky.png',
         () => {
             const rt = new THREE.WebGLCubeRenderTarget(texture.image.height);
             rt.fromEquirectangularTexture(renderer, texture);
@@ -175,7 +175,7 @@ const MainScene = () => {
 
     function createGun(){
         const loader = new THREE.FBXLoader();
-        loader.load( './guns/FBX/Pistol.fbx', object => {
+        loader.load( './res/guns/FBX/Pistol.fbx', object => {
 
             object.name = 'gun';
             object.scale.setScalar(0.001);
@@ -237,7 +237,7 @@ const MainScene = () => {
 
     function addBuilding(position, name, rotation=0) {
         const building = new THREE.FBXLoader();
-        building.load( './buildings/Models with Materials/FBX/' + name + '.fbx', object => {
+        building.load( './res/buildings/Models with Materials/FBX/' + name + '.fbx', object => {
 
             object.name = 'building' + buildingNo++;
 
@@ -302,7 +302,7 @@ const MainScene = () => {
             deathStart: 0
         };
 
-            zombieLoader.load('./enemies/FBX/' + fileName + '.fbx', object => {
+            zombieLoader.load('./res/enemies/FBX/' + fileName + '.fbx', object => {
 
                 object.name = 'zombie' + zombieNo;
 
@@ -736,8 +736,6 @@ const MainScene = () => {
         }
 
         document.getElementById("timeBar").style.width = timeLeftPercent + '%';
-
-        //  TODO: bloodFountain improvements
 
     }
 }
