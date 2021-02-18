@@ -20,11 +20,11 @@
       }
 
       body {
-        /*background-color: #ffffff;*/
         margin: 0;
         overflow: hidden;
         font-family: arial;
       }
+
 
       #loader{
         background-color: black;
@@ -34,6 +34,22 @@
         min-width: 100%;
         min-height: 100%;
       }
+
+      #game-over{
+        background-color: black;
+        color: white;
+        position: fixed;
+        top: 0;
+        left: 0;
+        min-width: 100%;
+        min-height: 100%;
+        display: none;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+
+      }
+
 
       #help{
         color: white;
@@ -186,13 +202,15 @@
     </style>
   </head>
 
+
   <body>
     <div id="loader">
       <div id="help">
         <h2>W, A, S, D = Move</h2>
         <h2>SPACE = Jump</h2>
         <h2>MOUSE = Look around</h2>
-        <h2>LEFT CLICK = Shoot, RIGHT CLICK = Gun focus</h2>
+        <h2>LEFT CLICK = Shoot</h2>
+        <h2>RIGHT CLICK = Gun focus</h2>
       </div>
       <div class="lds-spinner">
         <div></div>
@@ -212,6 +230,7 @@
 
 
 
+
     <div id="overlay">
       <div id="timeBar"></div>
     </div>
@@ -223,6 +242,15 @@
       </div>
 
     </div>
+
+    <div id="game-over">
+      <h1>GAME OVER</h1>
+      <h2>ZOMBIES KILLED:
+        <span id="zombies-killed"></span>
+      </h2>
+      <h2>PRESS ESC AND CLICK TO TRY AGAIN</h2>
+    </div>
+
     <script type="text/javascript"  src="main.js"></script>
   </body>
 </html>

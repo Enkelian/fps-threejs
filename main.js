@@ -20,6 +20,7 @@ const MainScene = () => {
         document.getElementById("loader").style.visibility = "hidden";
         instructions.style.visibility = 'visible';
 
+        resetTimes();
         startAnimation();
 
     };
@@ -39,7 +40,15 @@ const MainScene = () => {
 
 
     const instructions = document.getElementById( 'instructions' );
+    const gameOver = document.getElementById( 'game-over' );
 
+    const zombiesKilledElement = document.getElementById("zombies-killed");
+
+    gameOver.addEventListener( 'mousedown', function ( event ) {
+        gameOver.style.display = 'none';
+        resetAnimationSpecifics();
+        startAnimation();
+    }, false);
 
     const havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
 
@@ -51,8 +60,8 @@ const MainScene = () => {
 
             if ( document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element ) {
 
-                controls.enabled = true;
 
+                controls.enabled = true;
 
             } else {
 
@@ -69,17 +78,17 @@ const MainScene = () => {
             instructions.style.display = '';
 
         }
-
         // Hook pointer lock state change events
         document.addEventListener( 'pointerlockchange', pointerlockchange, false );
         document.addEventListener( 'mozpointerlockchange', pointerlockchange, false );
-        document.addEventListener( 'webkitpointerlockchange', pointerlockchange, false );
 
+        document.addEventListener( 'webkitpointerlockchange', pointerlockchange, false );
         document.addEventListener( 'pointerlockerror', pointerlockerror, false );
         document.addEventListener( 'mozpointerlockerror', pointerlockerror, false );
+
         document.addEventListener( 'webkitpointerlockerror', pointerlockerror, false );
 
-        instructions.addEventListener( 'click', function ( event ) {
+        function instructionsClickFunction ( event ) {
 
             instructions.style.display = 'none';
 
@@ -113,10 +122,11 @@ const MainScene = () => {
 
             }
 
-        }, false );
+        }
+
+        instructions.addEventListener( 'click', instructionsClickFunction, false );
 
     } else {
-
         instructions.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
     }
 
@@ -130,8 +140,7 @@ const MainScene = () => {
         });
 
 
-    let maxGameTime = 100000;
-    let extraTime = 0;
+    let maxGameTime = 10000;
 
     const scene = new THREE.Scene()
     scene.background = new THREE.Color(0xf0f0f0)
@@ -145,9 +154,6 @@ const MainScene = () => {
 
     const DPR = window.devicePixelRatio
     renderer.setPixelRatio(Math.min(2, DPR))
-
-
-    // const controls = new THREE.OrbitControls(camera, renderer.domElement)
 
     scene.add(new THREE.HemisphereLight(0xffffbb, 0x080820, 1))
     scene.add(new THREE.AmbientLight(0x666666))
@@ -203,7 +209,7 @@ const MainScene = () => {
     const player = { box: null }
 
     function setCharacterBox(){
-        let boxGeometry = new THREE.BoxGeometry(3, 4, 3);
+        let boxGeometry = new THREE.BoxGeometry(4, 4, 4);
         let boxMaterial = new THREE.MeshPhongMaterial({transparent: true, opacity: 0.1, color: 0x000000});
         let box = new THREE.Mesh(boxGeometry, boxMaterial);
         box.name = 'player';
@@ -216,7 +222,7 @@ const MainScene = () => {
         box.body.on.collision((otherObject, event) => {
 
             if (otherObject.name.startsWith('zombie') && !inactiveZombies[otherObject.name]) {
-                extraTime-=80;
+                startTime-=80;
             }
         });
 
@@ -334,7 +340,7 @@ const MainScene = () => {
 
                     } else if (otherObject.name !== 'ground') {
                         if (zombie.zombieCollided !== otherObject &&  !zombie.recentlyCollided) {
-                            let randomRotation = (0.5 - Math.random()) * Math.PI /2 + Math.PI; //
+                            let randomRotation = (0.5 - Math.random()) * Math.PI /2 + Math.PI;
                             object.rotation.y += randomRotation;
                             zombie.zombieCollided = otherObject;
                             zombie.recentlyCollided = true;
@@ -431,7 +437,6 @@ const MainScene = () => {
     camera.add(emitter);
 
 
-    window.addEventListener("mousedown", onMouseDown);
     let bullets = [];
 
     const gunTranslation = new THREE.Vector3(0.95, -0.05, 0);
@@ -543,32 +548,35 @@ const MainScene = () => {
     }
 
     function resetAnimationSpecifics() {
-        newZombieSpawnTime = 10000;
-        lastSpawnTime = Date.now();
-        startTime = Date.now();
-        extraTime = 0;
+        resetTimes();
         zombiesKilled = 0;
         activateAllZombies();
         randomizeAllZombiesPosition();
     }
 
+    function resetTimes(){
+        newZombieSpawnTime = 10000;
+        lastSpawnTime = Date.now();
+        startTime = Date.now();
+    }
+
     function stopAnimation() {
         animationPlaying = false;
+        window.removeEventListener("mousedown", onMouseDown);
+        zombiesKilledElement.textContent = zombiesKilled;
+        gameOver.style.display = 'block';
     }
 
     function startAnimation(){
-        // console.log(zombies)
         animationPlaying = true;
-
+        window.addEventListener("mousedown", onMouseDown);
         requestAnimationFrame(animate);
     }
 
     function randomizeAllZombiesPosition(){
-        console.log(zombies)
 
         for(let z in zombies){
             let zombie = zombies[z];
-            console.log(zombies[z]);
             zombie.object.position.copy(getRandomPosition());
             zombie.object.body.needUpdate = true;
         }
@@ -601,7 +609,7 @@ const MainScene = () => {
     const bloodAgeLimit = 1000;
     const zombieDieTime = 1000;
 
-    let newZombieSpawnTime = 10000;
+    let newZombieSpawnTime = 100000;
     let lastSpawnTime = Date.now();
 
     let startTime = Date.now();
@@ -666,10 +674,10 @@ const MainScene = () => {
                 } else if(currentTime - zombie.deathStart < zombieDieTime) {
 
                     zombie.mixer.clipAction(zombie.dieAnimation).play();
-                    extraTime += 200;
-                    zombiesKilled++;
+                    startTime += 200;
 
                 } else {
+                    zombiesKilled++;
 
                     zombie.mixer.stopAllAction();
                     bloodFountain(zombie.object.position);
@@ -720,19 +728,16 @@ const MainScene = () => {
 
         time = Date.now();
 
-        let timeLeftPercent = 100 - 100 * (time - extraTime - startTime)/maxGameTime;
+        if(startTime > time) startTime = time;
+
+        let timeLeftPercent = 100 - 100 * (time - startTime)/maxGameTime;
         if(timeLeftPercent - 0.001 < 0){
             stopAnimation();
-            resetAnimationSpecifics();
-            startAnimation();
         }
 
         document.getElementById("timeBar").style.width = timeLeftPercent + '%';
 
-        //  TODO: screens
         //  TODO: bloodFountain improvements
-        //  TODO: time over 100%
-        //  TODO: fix speed-up
 
     }
 }
