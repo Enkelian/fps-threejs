@@ -9,7 +9,6 @@ const MainScene = () => {
 
     THREE.DefaultLoadingManager.onStart = function ( url, itemsLoaded, itemsTotal ) {
 
-
         console.log( 'Started loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
 
     };
@@ -19,13 +18,9 @@ const MainScene = () => {
         console.log( 'Loading Complete!');
         document.getElementById("timeBar").style.visibility = "visible";
         document.getElementById("loader").style.visibility = "hidden";
-
+        instructions.style.visibility = 'visible';
 
         startAnimation();
-        // animationPlaying = true;
-        // requestAnimationFrame(animate);
-
-
 
     };
 
@@ -301,9 +296,6 @@ const MainScene = () => {
             deathStart: 0
         };
 
-        if( true
-            // !zombies || !zombies[0]
-        ) {
             zombieLoader.load('./enemies/FBX/' + fileName + '.fbx', object => {
 
                 object.name = 'zombie' + zombieNo;
@@ -363,7 +355,6 @@ const MainScene = () => {
 
 
             });
-        }
 
     }
 
@@ -556,7 +547,9 @@ const MainScene = () => {
         lastSpawnTime = Date.now();
         startTime = Date.now();
         extraTime = 0;
+        zombiesKilled = 0;
         activateAllZombies();
+        randomizeAllZombiesPosition();
     }
 
     function stopAnimation() {
@@ -564,19 +557,33 @@ const MainScene = () => {
     }
 
     function startAnimation(){
+        // console.log(zombies)
         animationPlaying = true;
+
         requestAnimationFrame(animate);
     }
 
+    function randomizeAllZombiesPosition(){
+        console.log(zombies)
+
+        for(let z in zombies){
+            let zombie = zombies[z];
+            console.log(zombies[z]);
+            zombie.object.position.copy(getRandomPosition());
+            zombie.object.body.needUpdate = true;
+        }
+    }
 
     function activateAllZombies(){
-        for(let element in inactiveZombies) activateOneZombie();
+        for(let element in inactiveZombies)
+            if (element !== undefined) activateOneZombie();
     }
 
     function activateOneZombie(){
         let newZombie, zombieName;
         for(zombieName in inactiveZombies){
             newZombie = inactiveZombies[zombieName];
+            console.log(newZombie);
             delete inactiveZombies[zombieName];
             break;
         }
@@ -714,12 +721,18 @@ const MainScene = () => {
         time = Date.now();
 
         let timeLeftPercent = 100 - 100 * (time - extraTime - startTime)/maxGameTime;
-        if(timeLeftPercent - 0.001 < 0) stopAnimation();
+        if(timeLeftPercent - 0.001 < 0){
+            stopAnimation();
+            resetAnimationSpecifics();
+            startAnimation();
+        }
 
         document.getElementById("timeBar").style.width = timeLeftPercent + '%';
 
         //  TODO: screens
         //  TODO: bloodFountain improvements
+        //  TODO: time over 100%
+        //  TODO: fix speed-up
 
     }
 }

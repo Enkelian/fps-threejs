@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc02b61f-cd3d-45e9-9d95-554c10977cb1" name="Default Changelist" comment="initial loading screen, skybox">
+    <list default="true" id="fc02b61f-cd3d-45e9-9d95-554c10977cb1" name="Default Changelist" comment="blood and bullets improved">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/PointerLockControls.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/PointerLockControls.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/main.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -95,7 +95,9 @@
       <workItem from="1610020605612" duration="3248000" />
       <workItem from="1610111263319" duration="17444000" />
       <workItem from="1610201136402" duration="62000" />
-      <workItem from="1610378420213" duration="6473000" />
+      <workItem from="1610378420213" duration="6494000" />
+      <workItem from="1613059566073" duration="2533000" />
+      <workItem from="1613661584534" duration="4566000" />
     </task>
     <task id="LOCAL-00001" summary="pointer lock">
       <created>1609109076281</created>
@@ -160,7 +162,14 @@
       <option name="project" value="LOCAL" />
       <updated>1610142012534</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="blood and bullets improved">
+      <created>1610385780181</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1610385780181</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -188,7 +197,8 @@
     <MESSAGE value="movement improvements" />
     <MESSAGE value="rotation fixed" />
     <MESSAGE value="initial loading screen, skybox" />
-    <option name="LAST_COMMIT_MESSAGE" value="initial loading screen, skybox" />
+    <MESSAGE value="blood and bullets improved" />
+    <option name="LAST_COMMIT_MESSAGE" value="blood and bullets improved" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -196,7 +206,6 @@
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/lib/PointerLockControls.js</url>
           <line>11</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>

@@ -45,9 +45,12 @@
       }
 
       .lds-spinner {
-        color: official;
-        display: inline-block;
-        position: relative;
+        /*color: official;*/
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-right: -50%;
+        transform: translate(-50%, -50%);
         width: 80px;
         height: 80px;
       }
@@ -143,7 +146,8 @@
 
         display: -webkit-box;
         display: -moz-box;
-        /*display: box;*/
+        visibility: hidden;
+        /*display: none;*/
 
         -webkit-box-orient: horizontal;
         -moz-box-orient: horizontal;
@@ -177,6 +181,8 @@
         visibility: hidden;
       }
 
+
+
     </style>
   </head>
 
@@ -203,6 +209,9 @@
         <div></div>
       </div>
     </div>
+
+
+
     <div id="overlay">
       <div id="timeBar"></div>
     </div>
