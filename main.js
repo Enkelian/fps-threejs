@@ -235,7 +235,7 @@ const MainScene = () => {
     let buildingNo = 0;
     const buildings = [];
 
-    function addBuilding(position, name, rotation=0) {
+    function createBuilding(position, name, rotation=0) {
         const building = new THREE.FBXLoader();
         building.load( './res/buildings/Models with Materials/FBX/' + name + '.fbx', object => {
 
@@ -271,7 +271,7 @@ const MainScene = () => {
 
             let randBuildingTypeIdx = Math.floor(Math.random() * buildingTypesLen)
             let rotation = z < 0 ? 0 : Math.PI;
-            addBuilding({x: x, y: 0, z: z}, buildingTypes[randBuildingTypeIdx], rotation);
+            createBuilding({x: x, y: 0, z: z}, buildingTypes[randBuildingTypeIdx], rotation);
 
             }
 
@@ -288,7 +288,7 @@ const MainScene = () => {
 
     const zombieLoader = new THREE.FBXLoader();
 
-    function addZombie(position, zombieNo, fileName) {
+    function createZombie(position, zombieNo, fileName) {
 
         const zombie = {
             object: null,
@@ -388,7 +388,7 @@ const MainScene = () => {
 
 
     for(zombieNo; zombieNo < 10; zombieNo < maxActiveZombies)
-        addZombie(getRandomPosition(), zombieNo++, getRandomSkin());
+        createZombie(getRandomPosition(), zombieNo++, getRandomSkin());
 
 
     function moveForward(zombieObj){
@@ -516,13 +516,6 @@ const MainScene = () => {
             blood.push({object: bloodDrop, birthTime: Date.now()});
         }
     }
-
-    function bloodFlow(bloodDrop){
-        bloodDrop.position.x += (Math.random() - 0.5) * 0.1;
-        bloodDrop.position.y += Math.random() * 0.1;
-        bloodDrop.position.z += (Math.random() - 0.5) * 0.1;
-    }
-
 
     function gunFocus(){
 
