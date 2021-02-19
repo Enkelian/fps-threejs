@@ -140,7 +140,7 @@ const MainScene = () => {
         });
 
 
-    let maxGameTime = 10000;
+    let maxGameTime = 30000;
 
     const scene = new THREE.Scene()
     scene.background = new THREE.Color(0xf0f0f0)
@@ -167,7 +167,6 @@ const MainScene = () => {
 
     physics.gravity = { x: 0, y: -10, z: 0 };
     // physics.debug.enable(true)
-
 
     const { factory } = physics
 
@@ -277,7 +276,6 @@ const MainScene = () => {
 
         )
     )
-
 
     let zombieNo = 0;
     let zombies = [];
@@ -442,7 +440,7 @@ const MainScene = () => {
     const gunTranslation = new THREE.Vector3(0.95, -0.05, 0);
     let gunFocused = -1;
 
-    const bulletGeometry = new THREE.SphereGeometry(0.04, 3, 3);
+    const bulletGeometry = new THREE.SphereGeometry(0.05, 3, 3);
     const bulletMaterial = new THREE.MeshLambertMaterial({ color: 0x9D8420 });
 
     function fireBullet(){
@@ -637,7 +635,6 @@ const MainScene = () => {
                         physics.destroy(bloodDrop.body);
                         blood.splice(i, 1);
                     } else {
-                        // bloodFlow(bloodDrop);
                         bloodDrop.body.needsUpdate = true;
                     }
                 }
@@ -711,13 +708,11 @@ const MainScene = () => {
 
         renderer.render(scene, camera);
 
-        physics.update(clock.getDelta() * 1000000000);
+        physics.update(clock.getDelta() * 100000000);
 
         requestAnimationFrame(animate);
 
         controls.update( Date.now() - time );
-
-        // renderer.render(scene, camera);
 
         time = Date.now();
 
