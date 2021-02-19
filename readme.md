@@ -1,6 +1,7 @@
 # Zombie Siege
 
 ## Basic information
+
 A simple FPS game. The objective is to kill as many zombies as possible in the limited time.
 Remaining time increases with every kill and decreases whenever a player comes into contact with an enemy.
 
@@ -9,6 +10,12 @@ Also, whenever the player comes close enough, a zombie will change their directi
 
 If a zombie dies, a defeat animation is played, and the zombie is added to a queue of inactive enemies. After some time,
 the zombie will be respawned at a randomly chosen location. 
+
+## Running
+
+Project can be run through IntelliJ IDE or using npx [npx](https://www.npmjs.com/package/npx).
+After installing npx, simply run `npx http-server .` in project root and enter the first link.
+
 ## Used libraries
 
 * ThreeJS

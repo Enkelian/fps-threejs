@@ -52,7 +52,7 @@ const MainScene = () => {
 
     const havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
 
-    if ( havePointerLock ) {
+    if (havePointerLock){
 
         const element = document.body;
 
@@ -140,7 +140,7 @@ const MainScene = () => {
         });
 
 
-    let maxGameTime = 30000;
+    let maxGameTime = 20000;
 
     const scene = new THREE.Scene()
     scene.background = new THREE.Color(0xf0f0f0)
@@ -234,7 +234,7 @@ const MainScene = () => {
     let buildingNo = 0;
     const buildings = [];
 
-    function createBuilding(position, name, rotation=0) {
+    function createBuilding(position, name, rotation=0){
         const building = new THREE.FBXLoader();
         building.load( './res/buildings/Models with Materials/FBX/' + name + '.fbx', object => {
 
@@ -538,7 +538,7 @@ const MainScene = () => {
         }
     }
 
-    function resetAnimationSpecifics() {
+    function resetAnimationSpecifics(){
         resetTimes();
         zombiesKilled = 0;
         activateAllZombies();
@@ -551,7 +551,7 @@ const MainScene = () => {
         startTime = Date.now();
     }
 
-    function stopAnimation() {
+    function stopAnimation(){
         animationPlaying = false;
         window.removeEventListener("mousedown", onMouseDown);
         zombiesKilledElement.textContent = zombiesKilled;

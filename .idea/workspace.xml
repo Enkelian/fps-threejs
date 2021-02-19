@@ -4,146 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc02b61f-cd3d-45e9-9d95-554c10977cb1" name="Default Changelist" comment="readme updated">
-      <change afterPath="$PROJECT_DIR$/res/buildings/Models with Materials/FBX/1Story_Sign_Mat.fbx" afterDir="false" />
+    <list default="true" id="fc02b61f-cd3d-45e9-9d95-554c10977cb1" name="Default Changelist" comment="obsolete files removed">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/Blends/BaseCharacter.blend" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/Blends/Zombie_Female.blend" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/Blends/Zombie_Male.blend" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/FBX/BaseCharacter.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/BaseCharacter.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/BaseCharacter.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/BlueSoldier_Female.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/BlueSoldier_Female.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/BlueSoldier_Male.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/BlueSoldier_Male.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Casual2_Female.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Casual2_Female.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Casual2_Male.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Casual2_Male.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Casual3_Female.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Casual3_Female.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Casual3_Male.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Casual3_Male.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Casual_Bald.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Casual_Bald.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Casual_Female.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Casual_Female.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Casual_Male.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Casual_Male.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Chef_Female.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Chef_Female.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Chef_Hat.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Chef_Hat.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Chef_Male.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Chef_Male.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Cow.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Cow.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Cowboy_Female.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Cowboy_Female.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Cowboy_Hair.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Cowboy_Hair.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Cowboy_Male.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Cowboy_Male.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Doctor_Female_Old.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Doctor_Female_Old.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Doctor_Female_Young.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Doctor_Female_Young.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Doctor_Male_Old.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Doctor_Male_Old.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Doctor_Male_Young.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Doctor_Male_Young.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Elf.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Elf.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Goblin_Female.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Goblin_Female.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Goblin_Male.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Goblin_Male.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Kimono_Female.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Kimono_Female.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Kimono_Male.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Kimono_Male.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Knight_Golden_Female.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Knight_Golden_Female.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Knight_Golden_Male.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Knight_Golden_Male.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Knight_Male.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Knight_Male.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Ninja_Female.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Ninja_Female.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Ninja_Male.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Ninja_Male.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Ninja_Male_Hair.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Ninja_Male_Hair.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Ninja_Sand.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Ninja_Sand.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Ninja_Sand_Female.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Ninja_Sand_Female.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/OldClassy_Female.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/OldClassy_Female.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/OldClassy_Male.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/OldClassy_Male.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Pirate_Female.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Pirate_Female.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Pirate_Male.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Pirate_Male.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Pug.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Pug.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Soldier_Female.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Soldier_Female.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Soldier_Male.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Soldier_Male.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Suit_Female.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Suit_Female.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Suit_Male.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Suit_Male.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/VikingHelmet.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/VikingHelmet.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Viking_Female.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Viking_Female.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Viking_Male.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Viking_Male.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Witch.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Witch.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Wizard.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Wizard.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Worker_Female.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Worker_Female.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Worker_Male.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Worker_Male.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Zombie_Female.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Zombie_Female.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Zombie_Male.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/OBJ/Zombie_Male.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/enemies/Preview.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/guns/Blends/P90.blend" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/guns/Blends/Pistol.blend" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/guns/Blends/Revolver.blend" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/guns/Blends/Rifle.blend" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/guns/Blends/Shotgun.blend" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/guns/Blends/SniperRifle.blend" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/guns/FBX/P90.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/guns/FBX/Revolver.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/guns/FBX/Rifle.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/guns/FBX/Shotgun.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/guns/FBX/SniperRifle.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/guns/OBJ/P90.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/guns/OBJ/P90.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/guns/OBJ/Pistol.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/guns/OBJ/Pistol.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/guns/OBJ/Revolver.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/guns/OBJ/Revolver.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/guns/OBJ/Rifle.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/guns/OBJ/Rifle.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/guns/OBJ/Shotgun.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/guns/OBJ/Shotgun.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/guns/OBJ/SniperRifle.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/guns/OBJ/SniperRifle.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/skyboxes/BlueSkySkybox.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/skyboxes/PurplyBlueSky.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/skyboxes/SkySkybox.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/skyboxes/SunsetSky.png" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -203,19 +66,6 @@
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -254,7 +104,8 @@
       <workItem from="1613679974719" duration="5421000" />
       <workItem from="1613689242959" duration="4534000" />
       <workItem from="1613694057855" duration="196000" />
-      <workItem from="1613749556409" duration="3350000" />
+      <workItem from="1613749556409" duration="3975000" />
+      <workItem from="1613753803657" duration="1532000" />
     </task>
     <task id="LOCAL-00001" summary="pointer lock">
       <created>1609109076281</created>
@@ -361,7 +212,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613693704582</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="obsolete files removed">
+      <created>1613752975769</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1613752975769</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -395,7 +253,8 @@
     <MESSAGE value="directories cleanup" />
     <MESSAGE value="readme" />
     <MESSAGE value="readme updated" />
-    <option name="LAST_COMMIT_MESSAGE" value="readme updated" />
+    <MESSAGE value="obsolete files removed" />
+    <option name="LAST_COMMIT_MESSAGE" value="obsolete files removed" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
