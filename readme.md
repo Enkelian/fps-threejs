@@ -13,10 +13,11 @@ the zombie will be respawned at a randomly chosen location.
 
 ## Running
 
-Project can be run through IntelliJ IDE or using npx [npx](https://www.npmjs.com/package/npx).
+Project can be run through IntelliJ IDE or using [npx](https://www.npmjs.com/package/npx).
 After installing npx, simply run `npx http-server .` in project root and enter the first link.
 
 ## Used libraries
+Są dwie propozycje, jedna jest dostępna w systemie Dyplom, a druga to "aplikacja webowa wspierająca koordynację audytów wewnętrznych w dużych organizacjach", na razie bez szczegółów, ale umawiamy się z nim na spotkanie w przyszłym tygodniu i będziemy dyskutować którego tematu się podejmiemy
 
 * ThreeJS
 * enable3d - a physics engine
